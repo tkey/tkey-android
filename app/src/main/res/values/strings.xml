@@ -12,4 +12,7 @@
     <string name="login_with_torus">Login with Torus</string>
     <string name="module_service_provider_base">Module service_provider_base</string>
     <string name="play_with_module_service_provider_base">Play with module service_provider_base</string>
+    <string name="input">Input</string>
+    <string name="encrypt">Encrypt</string>
+    <string name="decrypt">Decrypt</string>
 </resources>
