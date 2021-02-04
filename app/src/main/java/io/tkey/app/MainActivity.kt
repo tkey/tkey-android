@@ -1,9 +1,11 @@
 package io.tkey.app
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import kotlin.reflect.KClass
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,14 +15,14 @@ class MainActivity : AppCompatActivity() {
         val appBar = findViewById<Toolbar>(R.id.app_bar)
         appBar.setOnMenuItemClickListener { menu ->
             when (menu.itemId) {
-                R.id.base_service_provider -> navigateToBaseServiceProvider()
+                R.id.item_service_provider_base -> navigateTo(ServiceProviderBaseActivity::class)
                 else -> throw Exception("Invalid menu item.")
             }
             true
         }
     }
 
-    private fun navigateToBaseServiceProvider() {
-        Toast.makeText(this, "Navigating to Base service Provider", Toast.LENGTH_SHORT).show()
+    private fun <T : Activity> navigateTo(cls: KClass<T>) {
+        startActivity(Intent(this, cls.java))
     }
 }

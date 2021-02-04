@@ -10,6 +10,6 @@
     <string name="console">Console</string>
     <string name="console_log">console.log</string>
     <string name="login_with_torus">Login with Torus</string>
-    <string name="base_service_provider">Base service provider</string>
-    <string name="play_with_base_service_provider">Play with base service provider</string>
+    <string name="module_service_provider_base">Module service_provider_base</string>
+    <string name="play_with_module_service_provider_base">Play with module service_provider_base</string>
 </resources>

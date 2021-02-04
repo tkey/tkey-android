@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/base_service_provider"
-        android:title="@string/base_service_provider"
-        android:contentDescription="@string/play_with_base_service_provider"
+        android:id="@+id/item_service_provider_base"
+        android:title="@string/module_service_provider_base"
+        android:contentDescription="@string/play_with_module_service_provider_base"
         app:showAsAction="never" />
 
 </menu>
