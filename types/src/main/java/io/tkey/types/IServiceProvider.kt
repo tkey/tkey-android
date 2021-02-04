@@ -1,11 +1,11 @@
 package io.tkey.types
 
 import java.math.BigInteger
-import java.security.spec.EllipticCurve
+import java.security.KeyPairGenerator
 import java.util.concurrent.CompletableFuture
 
 interface IServiceProvider {
-    val ec: EllipticCurve
+    val ec: KeyPairGenerator;
     val postboxKey: BigInteger
 
     fun encrypt(msg: ByteArray): CompletableFuture<EncryptedMessage>

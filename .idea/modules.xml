@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/tKey.iml" filepath="$PROJECT_DIR$/.idea/modules/tKey.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/tkey.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/tkey.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/service_provider_base/tkey.service_provider_base.iml" filepath="$PROJECT_DIR$/.idea/modules/service_provider_base/tkey.service_provider_base.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/types/tkey.types.iml" filepath="$PROJECT_DIR$/.idea/modules/types/tkey.types.iml" />
     </modules>
   </component>
