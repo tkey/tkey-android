@@ -5,7 +5,7 @@ import java.security.KeyPairGenerator
 import java.util.concurrent.CompletableFuture
 
 interface IServiceProvider {
-    val ec: KeyPairGenerator;
+    val ec: KeyPairGenerator
     val postboxKey: BigInteger
 
     fun encrypt(msg: ByteArray): CompletableFuture<EncryptedMessage>

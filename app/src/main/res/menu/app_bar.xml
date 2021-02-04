@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/base_service_provider"
+        android:title="@string/base_service_provider"
+        android:contentDescription="@string/play_with_base_service_provider"
+        app:showAsAction="never" />
+
+</menu>
