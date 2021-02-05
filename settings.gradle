@@ -1,4 +1,4 @@
-include ':service_provider_base'
-include ':types'
-include ':app'
 rootProject.name = "tkey"
+include ':app'
+include ':types'
+include ':service_provider_base'
