@@ -4,7 +4,9 @@ import io.tkey.types.EncryptedMessage
 import io.tkey.types.IServiceProvider
 import io.tkey.utils.decodeBase64
 import io.tkey.utils.encodeBase64String
+import org.bouncycastle.jce.interfaces.ECPrivateKey
 import org.bouncycastle.jce.provider.BouncyCastleProvider
+import org.bouncycastle.jce.spec.ECPublicKeySpec
 import java.math.BigInteger
 import java.security.*
 import java.security.spec.ECGenParameterSpec
@@ -21,6 +23,16 @@ class BaseServiceProvider(postboxKey: String) :
 
             Security.insertProviderAt(BouncyCastleProvider(), 1)
         }
+
+        fun getPublicKey(privateKey: PrivateKey): PublicKey {
+            val ecPrivateKey = privateKey as ECPrivateKey
+
+            val q = ecPrivateKey.parameters.g.multiply(ecPrivateKey.d)
+            val ecPublicKeySpec = ECPublicKeySpec(q, ecPrivateKey.parameters)
+           
+            val keyFactory = KeyFactory.getInstance("EC")
+            return keyFactory.generatePublic(ecPublicKeySpec)
+        }
     }
 
     val keyPair: KeyPair
@@ -34,9 +46,8 @@ class BaseServiceProvider(postboxKey: String) :
 
         val keyFactory = KeyFactory.getInstance("EC")
         val privateKey = keyFactory.generatePrivate(privateKeySpec)
-
-        val keyGen = KeyPairGenerator.getInstance("EC")
-        keyPair = keyGen.generateKeyPair()
+        val publicKey = getPublicKey(privateKey)
+        keyPair = KeyPair(publicKey, privateKey)
     }
 
     private fun getCipherInstance(): Cipher = Cipher.getInstance("ECIES")
