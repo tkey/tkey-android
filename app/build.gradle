@@ -23,7 +23,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-   
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -36,6 +36,7 @@ android {
 
 dependencies {
     implementation project(':types')
+    implementation project(':utils')
     implementation project(':service_provider_base')
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

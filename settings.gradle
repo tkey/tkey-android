@@ -1,4 +1,5 @@
 rootProject.name = "tkey"
 include ':app'
 include ':types'
+include ':utils'
 include ':service_provider_base'

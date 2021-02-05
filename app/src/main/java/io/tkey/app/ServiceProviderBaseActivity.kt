@@ -5,7 +5,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import io.tkey.service_provider_base.BaseServiceProvider
-import io.tkey.types.toHexString
+import io.tkey.utils.toHexString
 
 class ServiceProviderBaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

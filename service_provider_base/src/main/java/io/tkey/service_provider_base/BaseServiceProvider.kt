@@ -10,8 +10,8 @@ import java.util.concurrent.CompletableFuture
 class BaseServiceProvider(postboxKey: String) :
     IServiceProvider {
 
-    override val ec: ECParameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1")
-    override val postboxKey: BigInteger = BigInteger(postboxKey, 16)
+    private val ec: ECParameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1")
+    private val postboxKey: BigInteger = BigInteger(postboxKey, 16)
 
     val publicKey: ByteArray
         get() {
