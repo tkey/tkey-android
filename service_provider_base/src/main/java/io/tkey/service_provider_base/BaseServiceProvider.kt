@@ -2,70 +2,30 @@ package io.tkey.service_provider_base
 
 import io.tkey.types.EncryptedMessage
 import io.tkey.types.IServiceProvider
-import io.tkey.utils.decodeBase64
-import io.tkey.utils.encodeBase64String
-import org.bouncycastle.jce.interfaces.ECPrivateKey
-import org.bouncycastle.jce.provider.BouncyCastleProvider
-import org.bouncycastle.jce.spec.ECPublicKeySpec
+import io.tkey.utils.*
 import java.math.BigInteger
-import java.security.*
-import java.security.spec.ECGenParameterSpec
-import java.security.spec.ECParameterSpec
-import java.security.spec.ECPrivateKeySpec
+import java.security.KeyPair
 import javax.crypto.Cipher
 
 class BaseServiceProvider(postboxKey: String) :
     IServiceProvider {
     companion object {
         init {
-            if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) != null)
-                Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
-
-            Security.insertProviderAt(BouncyCastleProvider(), 1)
-        }
-
-        fun getPublicKey(privateKey: PrivateKey): PublicKey {
-            val ecPrivateKey = privateKey as ECPrivateKey
-
-            val q = ecPrivateKey.parameters.g.multiply(ecPrivateKey.d)
-            val ecPublicKeySpec = ECPublicKeySpec(q, ecPrivateKey.parameters)
-           
-            val keyFactory = KeyFactory.getInstance("EC")
-            return keyFactory.generatePublic(ecPublicKeySpec)
+            setupECC()
         }
     }
 
-    val keyPair: KeyPair
-
-    init {
-        val algorithm = AlgorithmParameters.getInstance("EC")
-        algorithm.init(ECGenParameterSpec("secp256k1"))
-
-        val ecSpec = algorithm.getParameterSpec(ECParameterSpec::class.java)
-        val privateKeySpec = ECPrivateKeySpec(postboxKey.toBigInteger(16), ecSpec)
-
-        val keyFactory = KeyFactory.getInstance("EC")
-        val privateKey = keyFactory.generatePrivate(privateKeySpec)
-        val publicKey = getPublicKey(privateKey)
-        keyPair = KeyPair(publicKey, privateKey)
-    }
-
-    private fun getCipherInstance(): Cipher = Cipher.getInstance("ECIES")
+    val keyPair: KeyPair = postboxKey.toECKeyPair("secp256k1")
 
     override fun encrypt(msg: ByteArray): EncryptedMessage {
-        val cipher = getCipherInstance()
-        cipher.init(Cipher.ENCRYPT_MODE, keyPair.public)
-
+        val cipher = keyPair.getECCipherInstance(Cipher.ENCRYPT_MODE)
         val encryptedMsg = cipher.doFinal(msg)
         return EncryptedMessage(encryptedMsg.encodeBase64String(), "", "", "")
     }
 
     override fun decrypt(msg: EncryptedMessage): ByteArray {
-        val cipher = getCipherInstance()
-        cipher.init(Cipher.DECRYPT_MODE, keyPair.private)
-
-        val decryptedMsg = cipher.doFinal(msg.ciphertext.decodeBase64())
-        return decryptedMsg
+        val cipher = keyPair.getECCipherInstance(Cipher.DECRYPT_MODE)
+        return cipher.doFinal(msg.ciphertext.decodeBase64())
     }
 
     override fun sign(msg: BigInteger): String {
