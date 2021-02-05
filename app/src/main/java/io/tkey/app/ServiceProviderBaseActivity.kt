@@ -11,19 +11,30 @@ class ServiceProviderBaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_provider_base)
+
+        initServices()
         setEventHandlers()
     }
 
-    private val serviceProvider =
-        BaseServiceProvider("f1f02ee186749cfe1ef8f957fc3d7a5b7128f979bacc10ab3b2a811d4f990852")
+    private lateinit var serviceProvider: BaseServiceProvider
+
+    private fun initServices() {
+        serviceProvider = BaseServiceProvider(getString(R.string.mock_key))
+    }
 
     private fun setEventHandlers() {
+        val getPublicKey = findViewById<Button>(R.id.get_public_key)
+        getPublicKey.setOnClickListener { onGetPublicKey() }
+
         val encrypt = findViewById<Button>(R.id.encrypt)
         encrypt.setOnClickListener { onEncrypt() }
     }
 
-    private fun onEncrypt() {
+    private fun onGetPublicKey() {
         consoleLog(serviceProvider.publicKey.toHexString())
+    }
+
+    private fun onEncrypt() {
     }
 
     private fun consoleLog(text: String) {

@@ -28,6 +28,36 @@
             android:layout_height="wrap_content"
             android:padding="12dp">
 
+            <TextView
+                android:id="@+id/key_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/key"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/key_display"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/mock_key"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key_label" />
+
+            <TextView
+                android:id="@+id/input_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:text="@string/content"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/key_display" />
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/input_layout"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -35,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/input"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toBottomOf="@id/input_label">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/input"
@@ -52,6 +82,12 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/input_layout">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/get_public_key"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/get_public_key" />
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/encrypt"
