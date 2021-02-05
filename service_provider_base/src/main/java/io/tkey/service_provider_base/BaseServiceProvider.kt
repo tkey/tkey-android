@@ -2,29 +2,52 @@ package io.tkey.service_provider_base
 
 import io.tkey.types.EncryptedMessage
 import io.tkey.types.IServiceProvider
-import org.bouncycastle.jce.ECNamedCurveTable
-import org.bouncycastle.jce.spec.ECParameterSpec
+import io.tkey.utils.decodeBase64
+import io.tkey.utils.encodeBase64String
+import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.math.BigInteger
-import java.util.concurrent.CompletableFuture
+import java.security.KeyPair
+import java.security.KeyPairGenerator
+import java.security.Security
+import java.security.spec.ECGenParameterSpec
+import javax.crypto.Cipher
 
-class BaseServiceProvider(postboxKey: String) :
+class BaseServiceProvider() :
     IServiceProvider {
+    companion object {
+        init {
+            if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) != null)
+                Security.removeProvider(BouncyCastleProvider.PROVIDER_NAME)
 
-    private val ec: ECParameterSpec = ECNamedCurveTable.getParameterSpec("secp256k1")
-    private val postboxKey: BigInteger = BigInteger(postboxKey, 16)
-
-    val publicKey: ByteArray
-        get() {
-            val q = ec.g.multiply(BigInteger(1, postboxKey.toByteArray()))
-            return q.getEncoded(false)
+            Security.insertProviderAt(BouncyCastleProvider(), 1)
         }
-
-    override fun encrypt(msg: ByteArray): CompletableFuture<EncryptedMessage> {
-        TODO("Not yet implemented")
     }
 
-    override fun decrypt(msg: EncryptedMessage): CompletableFuture<ByteArray> {
-        TODO("Not yet implemented")
+    val keyPair: KeyPair
+
+    init {
+        val kgn = KeyPairGenerator.getInstance("EC")
+        kgn.initialize(ECGenParameterSpec("secp256k1"))
+
+        keyPair = kgn.generateKeyPair()
+    }
+
+    private fun getCipherInstance(): Cipher = Cipher.getInstance("ECIES")
+
+    override fun encrypt(msg: ByteArray): EncryptedMessage {
+        val cipher = getCipherInstance()
+        cipher.init(Cipher.ENCRYPT_MODE, keyPair.public)
+
+        val encryptedMsg = cipher.doFinal(msg)
+        return EncryptedMessage(encryptedMsg.encodeBase64String(), "", "", "")
+    }
+
+    override fun decrypt(msg: EncryptedMessage): ByteArray {
+        val cipher = getCipherInstance()
+        cipher.init(Cipher.DECRYPT_MODE, keyPair.private)
+
+        val decryptedMsg = cipher.doFinal(msg.ciphertext.decodeBase64())
+        return decryptedMsg
     }
 
     override fun sign(msg: BigInteger): String {
