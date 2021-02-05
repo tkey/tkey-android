@@ -22,7 +22,7 @@ class ServiceProviderBaseActivity : AppCompatActivity() {
     private var encryptedMessage: EncryptedMessage? = null
 
     private fun initServices() {
-        serviceProvider = BaseServiceProvider()
+        serviceProvider = BaseServiceProvider(getString(R.string.mock_key))
     }
 
     private fun setEventHandlers() {

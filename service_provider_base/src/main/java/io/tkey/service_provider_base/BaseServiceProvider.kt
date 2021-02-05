@@ -6,13 +6,13 @@ import io.tkey.utils.decodeBase64
 import io.tkey.utils.encodeBase64String
 import org.bouncycastle.jce.provider.BouncyCastleProvider
 import java.math.BigInteger
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.Security
+import java.security.*
 import java.security.spec.ECGenParameterSpec
+import java.security.spec.ECParameterSpec
+import java.security.spec.ECPrivateKeySpec
 import javax.crypto.Cipher
 
-class BaseServiceProvider() :
+class BaseServiceProvider(postboxKey: String) :
     IServiceProvider {
     companion object {
         init {
@@ -26,10 +26,17 @@ class BaseServiceProvider() :
     val keyPair: KeyPair
 
     init {
-        val kgn = KeyPairGenerator.getInstance("EC")
-        kgn.initialize(ECGenParameterSpec("secp256k1"))
+        val algorithm = AlgorithmParameters.getInstance("EC")
+        algorithm.init(ECGenParameterSpec("secp256k1"))
 
-        keyPair = kgn.generateKeyPair()
+        val ecSpec = algorithm.getParameterSpec(ECParameterSpec::class.java)
+        val privateKeySpec = ECPrivateKeySpec(postboxKey.toBigInteger(16), ecSpec)
+
+        val keyFactory = KeyFactory.getInstance("EC")
+        val privateKey = keyFactory.generatePrivate(privateKeySpec)
+
+        val keyGen = KeyPairGenerator.getInstance("EC")
+        keyPair = keyGen.generateKeyPair()
     }
 
     private fun getCipherInstance(): Cipher = Cipher.getInstance("ECIES")
